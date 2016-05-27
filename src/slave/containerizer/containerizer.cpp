@@ -39,6 +39,7 @@
 #include "slave/containerizer/external_containerizer.hpp"
 
 #include "slave/containerizer/mesos/containerizer.hpp"
+#include "slave/containerizer/hypervisor/containerizer.hpp"
 #include "slave/containerizer/mesos/launcher.hpp"
 #ifdef __linux__
 #include "slave/containerizer/mesos/linux_launcher.hpp"
@@ -243,6 +244,16 @@ Try<Containerizer*> Containerizer::create(
         DockerContainerizer::create(flags, fetcher);
       if (containerizer.isError()) {
         return Error("Could not create DockerContainerizer: " +
+                     containerizer.error());
+      } else {
+        containerizers.push_back(containerizer.get());
+      }
+    } else if (type == "hypervisor") {
+      Try<HypervisorContainerizer*> containerizer =
+      HypervisorContainerizer::create(flags, fetcher);
+
+      if (containerizer.isError()) {
+        return Error("Could not create HypervisorContainerizer: " +
                      containerizer.error());
       } else {
         containerizers.push_back(containerizer.get());

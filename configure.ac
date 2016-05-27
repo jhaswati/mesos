@@ -468,6 +468,11 @@ AS_CASE($ax_cv_cxx_compiler_vendor,
     CFLAGS="${CFLAGS} -Wno-unused-local-typedefs"
     CXXFLAGS="${CXXFLAGS} -Wno-unused-local-typedefs"
 
+    AC_MSG_NOTICE([Setting up CXXFLAGS for libvirt])
+    # Setting CXXFLAGS for using libvirt header files
+    CXXFLAGS="${CXXFLAGS} -lvirt"
+    CFLAGS="${CXXFLAGS} -lvirt"
+
     # Disable 'maybe-uninitialized' warning when "-O2" is enabled due
     # to MESOS-2690. This is short term fix until the GCC bug is fixed.
     case $CXXFLAGS in
